@@ -6,4 +6,16 @@ class PayloadRequest < ActiveRecord::Base
   belongs_to :user_agent_device
   belongs_to :resolution
   belongs_to :ip
+
+  def self.average_response_time
+    average(:responded_in)
+  end
+
+  def self.min_response_time
+    minimum(:responded_in)
+  end
+
+  def self.max_response_time
+    maximum(:responded_in)
+  end
 end
