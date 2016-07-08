@@ -7,19 +7,19 @@ class PayloadRequestTest < Minitest::Test
 #2. Test that it does not get created with bad/no info
 #3. Test that it has a relationship using name.respond_to?(:attribute)
 
-  def payload_request
-    payload = '{
-      "url":"http://jumpstartlab.com/blog",
-      "requestedAt":"2013-02-16 21:38:28 -0700",
-      "respondedIn":37,
-      "referredBy":"http://jumpstartlab.com",
-      "requestType":"GET",
-      "userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-      "resolutionWidth":"1920",
-      "resolutionHeight":"1280",
-      "ip":"63.29.38.211"
-    }'
-  end
+  # def payload_request
+  #   payload = '{
+  #     "url":"http://jumpstartlab.com/blog",
+  #     "requestedAt":"2013-02-16 21:38:28 -0700",
+  #     "respondedIn":37,
+  #     "referredBy":"http://jumpstartlab.com",
+  #     "requestType":"GET",
+  #     "userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+  #     "resolutionWidth":"1920",
+  #     "resolutionHeight":"1280",
+  #     "ip":"63.29.38.211"
+  #   }'
+  # end
 
   def test_that_it_creates_a_payload_request
     pr = PayloadRequest.new(requested_at: "2013-02-16 21:38:28 -0700",
@@ -143,8 +143,7 @@ class PayloadRequestTest < Minitest::Test
   end
 
   def test_it_can_find_the_average
-    skip
-    pr1 = PayloadRequest.new(requested_at: "2013-02-16 21:38:28 -0700",
+    pr1 = PayloadRequest.create(requested_at: "2013-02-16 21:38:28 -0700",
                             responded_in: 40,
                             url_id: 1,
                             referral_id: 1,
@@ -152,7 +151,7 @@ class PayloadRequestTest < Minitest::Test
                             user_agent_device_id: 1,
                             resolution_id: 1,
                             ip_id: 1)
-    pr2 = PayloadRequest.new(requested_at: "2014-02-16 21:38:28 -0700",
+    pr2 = PayloadRequest.create(requested_at: "2014-02-16 21:38:28 -0700",
                             responded_in: 60,
                             url_id: 2,
                             referral_id: 2,
@@ -165,12 +164,44 @@ class PayloadRequestTest < Minitest::Test
   end
 
   def test_it_can_find_the_minimum_reponse_time
-    skip
+    pr1 = PayloadRequest.create(requested_at: "2013-02-16 21:38:28 -0700",
+                            responded_in: 40,
+                            url_id: 1,
+                            referral_id: 1,
+                            request_type_id: 1,
+                            user_agent_device_id: 1,
+                            resolution_id: 1,
+                            ip_id: 1)
+    pr2 = PayloadRequest.create(requested_at: "2014-02-16 21:38:28 -0700",
+                            responded_in: 60,
+                            url_id: 2,
+                            referral_id: 2,
+                            request_type_id: 2,
+                            user_agent_device_id: 2,
+                            resolution_id: 2,
+                            ip_id: 2)
 
+      assert_equal 40, PayloadRequest.min_response_time
   end
 
   def test_it_can_find_the_maximum_response_time
-    skip
+    pr1 = PayloadRequest.create(requested_at: "2013-02-16 21:38:28 -0700",
+                            responded_in: 40,
+                            url_id: 1,
+                            referral_id: 1,
+                            request_type_id: 1,
+                            user_agent_device_id: 1,
+                            resolution_id: 1,
+                            ip_id: 1)
+    pr2 = PayloadRequest.create(requested_at: "2014-02-16 21:38:28 -0700",
+                            responded_in: 60,
+                            url_id: 2,
+                            referral_id: 2,
+                            request_type_id: 2,
+                            user_agent_device_id: 2,
+                            resolution_id: 2,
+                            ip_id: 2)
 
+      assert_equal 60, PayloadRequest.max_response_time
   end
 end
