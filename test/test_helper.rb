@@ -59,6 +59,7 @@ module TestHelpers
         responded_in: 5 *(i + 1), referral_id: referral.id,
         request_type_id: request_type.id, user_agent_device_id: user_agent_device.id,
         resolution_id: resolution.id, ip_id: ip.id})
+        binding.pry
         p payload_request
       end
     end
