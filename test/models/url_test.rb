@@ -1,7 +1,6 @@
 require_relative '../test_helper'
 
 class UrlTest < Minitest::Test
-  include TestHelpers
 
   def setup
     PayloadRequest.find_or_create_by({url: Url.find_or_create_by(root: "http://jumpstartlab.com", path: "/blog"),
@@ -34,6 +33,7 @@ class UrlTest < Minitest::Test
                            ip: Ip.find_or_create_by(ip_address: "66.66.66.666"),
                            sha: Digest::SHA256.digest("data_three")
                            })
+                           binding.pry
   end
 
   def test_that_it_creates_a_url_row
