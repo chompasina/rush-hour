@@ -9,5 +9,4 @@ class Client < ActiveRecord::Base
  has_many :referrals,          through: :payload_requests
  has_many :request_types,      through: :payload_requests
  has_many :resolutions,        through: :payload_requests
-
 end
