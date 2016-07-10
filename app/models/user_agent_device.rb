@@ -12,5 +12,8 @@ class UserAgentDevice < ActiveRecord::Base
   def self.os_breakdown
     group(:os)
   end
-  
+
+  def self.user_agent_pair
+    pluck(:browser, :os)
+  end
 end

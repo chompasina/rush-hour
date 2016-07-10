@@ -8,7 +8,7 @@ class RequestType < ActiveRecord::Base
     #   verb.count
     # end
     # self.group(:verb)
-    # count(:verb)
+    count(:verb)
   end
 
   def self.verb_list

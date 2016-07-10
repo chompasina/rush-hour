@@ -54,7 +54,7 @@ module TestHelpers
   def create_single_payload(number=1)
     number.times do
       url               = Url.find_or_create_by(root: parsed_root, path: parsed_path)
-      request_type      = RequestType.find_or_create_by(verb: parsed_payload["requestType"])
+      request_type      = RequestType.find_or_create_by(verb: [parsed_payload["requestType"]])
       resolution        = Resolution.find_or_create_by(height: parsed_payload["resolutionHeight"], width: parsed_payload["resolutionWidth"])
       referral          = Referral.find_or_create_by(name: parsed_payload["referredBy"])
       user_agent_device = UserAgentDevice.find_or_create_by(os: parsed_os, browser: parsed_browser)
@@ -63,7 +63,6 @@ module TestHelpers
         responded_in: 5, referral_id: referral.id,
         request_type_id: request_type.id, user_agent_device_id: user_agent_device.id,
         resolution_id: resolution.id, ip_id: ip.id, sha: Digest::SHA256.digest("#{i + 1}")})
-      p payload_request
     end
   end
 
@@ -77,20 +76,13 @@ module TestHelpers
       ip                = Ip.find_or_create_by(ip_address: parsed_payload["ip"].sub("6", "#{i}"))
       payload_request   = PayloadRequest.create({url: url,
                                                  requested_at: Time.now.to_s,
-                                                 responded_in: 5 *(i + 1),
+                                                 responded_in: (5 *(i + 1)),
                                                  referral: referral,
                                                  request_type: request_type,
                                                  user_agent_device: user_agent_device,
-                                                 resolution: resolution, 
+                                                 resolution: resolution,
                                                  ip: ip,
                                                  sha: Digest::SHA256.digest("#{i + 2}")})
-      p payload_request
-      # p url
-      # p request_type
-      # p resolution
-      # p referral
-      p user_agent_device
-      p ip
     end
   end
 

@@ -27,4 +27,8 @@ class PayloadRequest < ActiveRecord::Base
   def self.max_response_time
     maximum(:responded_in)
   end
+
+  def self.return_all_response_times
+    pluck(:responded_in)
+  end
 end
