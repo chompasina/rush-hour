@@ -19,7 +19,7 @@ class RequestTypeTest < Minitest::Test
   end
 
   def test_it_can_list_all_verbs_used
-    create_multiple_payloads(3)
-    assert_equal ["GET"], RequestType.verb_list
+    setup_with_dynamic_data
+    assert_equal ["GET", "PUT", "DELETE", "POST"], RequestType.verb_list
   end
 end

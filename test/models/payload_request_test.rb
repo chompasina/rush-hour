@@ -188,7 +188,7 @@ class PayloadRequestTest < Minitest::Test
   end
 
   def test_it_can_return_most_frequent_request_type
-    setup_for_url
+    setup_with_dynamic_data
     result = "POST"
     assert_equal result, PayloadRequest.most_frequent_request_type
   end

@@ -33,13 +33,24 @@ module TestHelpers
     DatabaseCleaner.clean
   end
 
-  def create_single_payload
-    dp = DataParser.new(payload)
-    dp.parse_payload
+  def parsed_payload
+    JSON.parse(payload)
   end
 
-  def create_client
-    client = Client.new(identifier: "turing", root_url: "https://www.turing.io/")
+  def parsed_root
+    URI.parse(parsed_payload["url"]).host
+  end
+
+  def parsed_path
+    URI.parse(parsed_payload["url"]).path
+  end
+
+  def parsed_os
+    UserAgent.parse(parsed_payload["userAgent"]).platform
+  end
+
+  def parsed_browser
+    UserAgent.parse(parsed_payload["userAgent"]).browser
   end
 
   def payload
@@ -54,10 +65,6 @@ module TestHelpers
     "ip":"63.29.38.211"}'
   end
 
-  def parsed_payload
-    JSON.parse(payload)
-  end
-
   def create_multiple_payloads(number=2)
     number.times do |i|
       url               = Url.find_or_create_by(root: parsed_root, path: parsed_path.insert(-1, "#{i}"))
@@ -66,7 +73,7 @@ module TestHelpers
       referral          = Referral.find_or_create_by(name: parsed_payload["referredBy"].insert(-1, "#{i}"))
       user_agent_device = UserAgentDevice.find_or_create_by(os: parsed_os, browser: parsed_browser.insert(-1, "#{i}"))
       ip                = Ip.find_or_create_by(ip_address: parsed_payload["ip"].sub("6", "#{i}"))
-      payload_request   = PayloadRequest.create({url: url,
+      PayloadRequest.create({url: url,
         requested_at: "2013-02-16 2#{i}:38:28 -0700",
         responded_in: 5 *(i + 1),
         referral: referral,
@@ -78,74 +85,54 @@ module TestHelpers
         client: Client.find_or_create_by(identifier: "turing", root_url: "https://turing.io")
         })
       end
-    end
+  end
 
-    def parsed_root
-      URI.parse(parsed_payload["url"]).host
-    end
-
-    def parsed_path
-      URI.parse(parsed_payload["url"]).path
-    end
-
-    def parsed_os
-      UserAgent.parse(parsed_payload["userAgent"]).platform
-    end
-
-    def parsed_browser
-      UserAgent.parse(parsed_payload["userAgent"]).browser
-    end
-
-    def create_client
-      Client.create(identifier: "turing", root_url: "https://turing.io")
-    end
-
-    def setup_for_url
+  def setup_with_dynamic_data
+    PayloadRequest.find_or_create_by({url: Url.find_or_create_by(root: "http://jumpstartlab.com", path: "/blog"),
+      requested_at: "2014-02-16 21:38:28 -0700",
+      responded_in: 0,
+      referral: Referral.find_or_create_by(name: "http://jumpstartlab.com"),
+      request_type: RequestType.find_or_create_by(verb: "GET"),
+      user_agent_device: UserAgentDevice.find_or_create_by(os: "Chrome", browser: "Macintosh"),
+      resolution: Resolution.find_or_create_by(height: "1280", width: "1920"),
+      ip: Ip.find_or_create_by(ip_address: "33.33.33.333"),
+      sha: Digest::SHA256.digest("data_one"),
+      client: Client.find_or_create_by(identifier: "turing", root_url: "https://turing.io")
+      })
       PayloadRequest.find_or_create_by({url: Url.find_or_create_by(root: "http://jumpstartlab.com", path: "/blog"),
-        requested_at: "2014-02-16 21:38:28 -0700",
-        responded_in: 0,
-        referral: Referral.find_or_create_by(name: "http://jumpstartlab.com"),
-        request_type: RequestType.find_or_create_by(verb: "GET"),
-        user_agent_device: UserAgentDevice.find_or_create_by(os: "Chrome", browser: "Macintosh"),
-        resolution: Resolution.find_or_create_by(height: "1280", width: "1920"),
-        ip: Ip.find_or_create_by(ip_address: "33.33.33.333"),
-        sha: Digest::SHA256.digest("data_one"),
+        requested_at: "2015-02-16 21:38:28 -0700",
+        responded_in: 50,
+        referral: Referral.find_or_create_by(name: "http://layofflab.com"),
+        request_type: RequestType.find_or_create_by(verb: "PUT"),
+        user_agent_device: UserAgentDevice.find_or_create_by(os: "Safari", browser: "Mac"),
+        resolution: Resolution.find_or_create_by(height: "1000", width: "2000"),
+        ip: Ip.find_or_create_by(ip_address: "22.22.22.222"),
+        sha: Digest::SHA256.digest("data_two"),
         client: Client.find_or_create_by(identifier: "turing", root_url: "https://turing.io")
         })
         PayloadRequest.find_or_create_by({url: Url.find_or_create_by(root: "http://jumpstartlab.com", path: "/blog"),
-          requested_at: "2015-02-16 21:38:28 -0700",
+          requested_at: "2016-02-16 29:38:28 -0700",
           responded_in: 50,
-          referral: Referral.find_or_create_by(name: "http://layofflab.com"),
-          request_type: RequestType.find_or_create_by(verb: "PUT"),
-          user_agent_device: UserAgentDevice.find_or_create_by(os: "Safari", browser: "Mac"),
-          resolution: Resolution.find_or_create_by(height: "1000", width: "2000"),
+          referral: Referral.find_or_create_by(name: "https://google.com"),
+          request_type: RequestType.find_or_create_by(verb: "DELETE"),
+          user_agent_device: UserAgentDevice.find_or_create_by(os: "SafariXL", browser: "Mac"),
+          resolution: Resolution.find_or_create_by(height: "1000", width: "3000"),
           ip: Ip.find_or_create_by(ip_address: "22.22.22.222"),
           sha: Digest::SHA256.digest("data_two"),
           client: Client.find_or_create_by(identifier: "turing", root_url: "https://turing.io")
           })
+        3.times do |i|
           PayloadRequest.find_or_create_by({url: Url.find_or_create_by(root: "http://jumpstartlab.com", path: "/blog"),
-            requested_at: "2016-02-16 29:38:28 -0700",
-            responded_in: 50,
-            referral: Referral.find_or_create_by(name: "https://google.com"),
-            request_type: RequestType.find_or_create_by(verb: "DELETE"),
-            user_agent_device: UserAgentDevice.find_or_create_by(os: "SafariXL", browser: "Mac"),
-            resolution: Resolution.find_or_create_by(height: "1000", width: "3000"),
-            ip: Ip.find_or_create_by(ip_address: "22.22.22.222"),
-            sha: Digest::SHA256.digest("data_two"),
+            requested_at: "2016-02-16 2#{i}:38:20 -0700",
+            responded_in: 100,
+            referral: Referral.find_or_create_by(name: "http://turing.io"),
+            request_type: RequestType.find_or_create_by(verb: "POST"),
+            user_agent_device: UserAgentDevice.find_or_create_by(os: "Firefox", browser: "Mac_daddy"),
+            resolution: Resolution.find_or_create_by(height: "#{i}00", width: "900"),
+            ip: Ip.find_or_create_by(ip_address: "6#{i}.66.66.666"),
+            sha: Digest::SHA256.digest("data_three"),
             client: Client.find_or_create_by(identifier: "turing", root_url: "https://turing.io")
             })
-          3.times do |i|
-            PayloadRequest.find_or_create_by({url: Url.find_or_create_by(root: "http://jumpstartlab.com", path: "/blog"),
-              requested_at: "2016-02-16 2#{i}:38:20 -0700",
-              responded_in: 100,
-              referral: Referral.find_or_create_by(name: "http://turing.io"),
-              request_type: RequestType.find_or_create_by(verb: "POST"),
-              user_agent_device: UserAgentDevice.find_or_create_by(os: "Firefox", browser: "Mac_daddy"),
-              resolution: Resolution.find_or_create_by(height: "#{i}00", width: "900"),
-              ip: Ip.find_or_create_by(ip_address: "6#{i}.66.66.666"),
-              sha: Digest::SHA256.digest("data_three"),
-              client: Client.find_or_create_by(identifier: "turing", root_url: "https://turing.io")
-              })
-          end
-    end
+        end
+  end
 end

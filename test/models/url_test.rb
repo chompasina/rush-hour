@@ -33,50 +33,50 @@ class UrlTest < Minitest::Test
     assert url.respond_to?(:user_agent_devices)
   end
 
-  def test_the_find_specific_url
-    setup_for_url
+  def test_the_finding_specific_url
+    setup_with_dynamic_data
 
-    assert_instance_of Url, Url.find_specific_url("/blog")
+    assert_instance_of Url, Url.find_by(path: "/blog")
   end
 
   def test_max_response_time_for_url
-    setup_for_url
-    url = Url.find_specific_url("/blog")
+    setup_with_dynamic_data
+    url = Url.find_by(path:"/blog")
 
     assert_equal 100, url.max_response_time_for_url
   end
 
   def test_min_response_time_for_url
-    setup_for_url
-    url = Url.find_specific_url("/blog")
+    setup_with_dynamic_data
+    url = Url.find_by(path: "/blog")
 
     assert_equal 0, url.min_response_time_for_url
   end
 
   def test_response_time_list_for_url
-    setup_for_url
-    url = Url.find_specific_url("/blog")
+    setup_with_dynamic_data
+    url = Url.find_by(path: "/blog")
 
     assert_equal [100, 100, 100, 50, 50, 0], url.response_time_list_for_url
   end
 
   def test_average_response_time_for_url
-    setup_for_url
-    url = Url.find_specific_url("/blog")
+    setup_with_dynamic_data
+    url = Url.find_by(path: "/blog")
 
     assert_equal 66, url.average_response_time_for_url
   end
 
   def test_finds_verbs_associated_with_url
-    setup_for_url
-    url = Url.find_specific_url("/blog")
+    setup_with_dynamic_data
+    url = Url.find_by(path: "/blog")
 
     assert_equal ["GET", "PUT", "DELETE", "POST"], url.verb_list_for_url
   end
 
   def test_top_referrers_for_url
-    setup_for_url
-    url = Url.find_specific_url("/blog")
+    setup_with_dynamic_data
+    url = Url.find_by(path: "/blog")
 
     expected = ["http://turing.io", "http://jumpstartlab.com", "https://google.com"]
     assert_equal expected, url.top_referrers_for_url
@@ -84,8 +84,8 @@ class UrlTest < Minitest::Test
   end
 
   def test_top_user_agents_for_url
-    setup_for_url
-    url = Url.find_specific_url("/blog")
+    setup_with_dynamic_data
+    url = Url.find_by(path: "/blog")
 
     expected = ["Browser: Mac_daddy, OS: Firefox", "Browser: Macintosh, OS: Chrome", "Browser: Mac, OS: Safari"]
     assert_equal expected, url.top_user_agents_for_url

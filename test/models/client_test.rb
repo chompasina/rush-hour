@@ -57,5 +57,4 @@ class ClientTest < Minitest::Test
     client = Client.new
     assert client.respond_to?(:resolutions)
   end
-
 end
