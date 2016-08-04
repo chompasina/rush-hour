@@ -6,6 +6,7 @@ This application allows us to analyze payload data from another website by accep
 
 In order to interpret the payloads, our application parsed JSON format. 
 
-While working on this project, I developed a keen understanding of how to use databases for storage and ActiveRecord to retrieve data from our Ruby database, how to build and understand normalized SQL-based relational database structures, and how HTTP verbs (GET, PUT, and POST) work, and the role of headers, referrers, and payloads. 
+While working on this project, our group developed a keen understanding of how
+to use databases for storage, to use ActiveRecord methods to retrieve data from our database, to build normalized SQL-based relational database structures, and to use HTTP verbs (GET, PUT, and POST) to guide our routes, and to manipulate and parse headers, referrers, and payloads. 
 
-I would have liked to improve our view logic which has some extra logic that could have been pushed down the stack. I also would hve like to spend more time styling with HTML and CSS. 
+If we had had more time, we would have liked to improve our views which had some extra logic that could have been pushed down the stack. We also would have like to spend more time styling with HTML and CSS. 
